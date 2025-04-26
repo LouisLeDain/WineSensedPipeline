@@ -24,7 +24,7 @@ input:
 output:
 - la data (dépend de ce qu'on a choisi avant)
 
-### Bloc preprocessing data
+### Bloc model 
 init :
 
 input:
