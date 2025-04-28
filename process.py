@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.manifold import MDS, TSNE
 from sklearn.cross_decomposition import CCA 
 from sklearn.preprocessing import StandardScaler
+from PIL import Image
 
 import torch
 from transformers import CLIPModel, CLIPTokenizer, CLIPProcessor, CLIPImageProcessor
@@ -18,17 +19,17 @@ def perform_nmds(distance_matrix):
     '''
 
     # Reshape the distance_matrix
-    disance_matrix_symmetric = (distance_matrix + distance_matrix.T) / 2 # Ensure the symmetry of distances
+    distance_matrix_symmetric = (distance_matrix + distance_matrix.T) / 2 # Ensure the symmetry of distances
     np.fill_diagonal(distance_matrix_symmetric, 0) # Ensure each point is at distance 0 of itself
 
     # Initialize and fit NMDS model
-    nmds = MDS(n_components=2, metric=False, dissimilarity='euclidean', random_state=0)
-    nmds_results = nmds.fit_transform(distance_matrix) # (x_pos, y_pos)
+    nmds = MDS(n_components=2, metric=False, dissimilarity='precomputed', random_state=0)
+    nmds_results = nmds.fit_transform(distance_matrix_symmetric) # (x_pos, y_pos)
     
     return nmds_results 
 
 
-def perform_tSNE(data):
+def perform_tsne(data):
     '''
     Perform t-SNE over data :
         input -> data with attributes
@@ -83,12 +84,12 @@ def perform_clip_from_text(text):
     # Get text embeddings
     text_input = tokenizer(text, padding=True, return_tensors="pt")
     text_embeddings = model.get_text_features(**text_input)
-    text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
+    text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True) # (len(text), 512)
 
     return text_embeddings
 
 
-def perform_clip_from_image(image):
+def perform_clip_from_image(image_path):
     '''
     Compute CLIP embeddings over images:
         input -> image
@@ -101,9 +102,9 @@ def perform_clip_from_image(image):
     image_processor = CLIPImageProcessor.from_pretrained(model_name)
 
     # Get text embeddings
-    img = Image.open(image)    
-    image_input = image_processor(images=img, return_tensors="pt")
+    image = Image.open(image_path)    
+    image_input = image_processor(images=image, return_tensors="pt")
     image_embeddings = model.get_image_features(**image_input)
-    image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True)
+    image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True) # (n_img, 512)
 
     return image_embeddings
