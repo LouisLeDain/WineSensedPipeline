@@ -3,7 +3,7 @@ from sklearn.manifold import MDS, TSNE
 from sklearn.cross_decomposition import CCA 
 from sklearn.preprocessing import StandardScaler
 from PIL import Image
-
+import pandas as pd
 import torch
 from transformers import CLIPModel, CLIPTokenizer, CLIPProcessor, CLIPImageProcessor
 
@@ -90,6 +90,7 @@ def perform_clip_from_text(text):
 
 
 def perform_clip_from_image(image_path):
+    
     '''
     Compute CLIP embeddings over images:
         input -> image
@@ -104,7 +105,70 @@ def perform_clip_from_image(image_path):
     # Get text embeddings
     image = Image.open(image_path)    
     image_input = image_processor(images=image, return_tensors="pt")
-    image_embeddings = model.get_image_features(**image_input)
+    image_embeddings = model.get_image_features(**image_input) ############## Tout se fait sur le CPU la ? à changer.
     image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True) # (n_img, 512)
 
     return image_embeddings
+
+def pairwise_distance_matrix(napping_csv):
+    '''
+    Compute the pairwise distance matrix of the data using the napping.csv file :
+        input -> napping.csv
+        output -> distance matrix
+    '''
+    
+
+    
+    # Read the data
+    data = pd.read_csv(napping_csv)
+    
+    # Get unique experiment IDs
+    unique_wine_ids = sorted(data['experiment_id'].unique())
+    n_wines = len(unique_wine_ids)
+    
+    # Create a mapping from wine IDs to matrix indices
+    id_to_index = {wine_id: idx for idx, wine_id in enumerate(unique_wine_ids)} # remember that the order of the wine ids is important for the distance matrix
+    
+    # Initialize distance matrix and count matrix
+    distance_matrix = np.zeros((n_wines, n_wines))
+    count_matrix = np.zeros((n_wines, n_wines))
+    
+    # Group data by session, event, and experiment number to get different napping sessions
+    grouped = data.groupby(['session_round_name', 'event_name', 'experiment_no'])
+    
+    # Process each group
+    for _, group in grouped:
+        # For each pair of wines in this group, compute Euclidean distance
+        for i, row1 in group.iterrows():
+            wine_id1 = row1['experiment_id']
+            coords1 = np.array([row1['coor1'], row1['coor2']])
+            
+            for j, row2 in group.iterrows():
+                if i != j:  # Don't compute distance to itself
+                    wine_id2 = row2['experiment_id']
+                    coords2 = np.array([row2['coor1'], row2['coor2']])
+                    
+                    # Compute Euclidean distance
+                    dist = np.linalg.norm(coords1 - coords2)
+                    
+                    # Update distance and count matrices
+                    idx1, idx2 = id_to_index[wine_id1], id_to_index[wine_id2]
+                    distance_matrix[idx1, idx2] += dist
+                    count_matrix[idx1, idx2] += 1
+    
+    # Compute average distances (avoid division by zero)
+    mask = count_matrix > 0
+    distance_matrix[mask] = distance_matrix[mask] / count_matrix[mask]
+    
+    # For pairs that don't have a distance (count = 0), set to NaN
+    distance_matrix[~mask] = np.nan
+    
+    # Make the matrix symmetric by averaging with its transpose
+    distance_matrix = (distance_matrix + distance_matrix.T) / 2
+    
+    # Set diagonal to zero (distance from a wine to itself is zero)
+    np.fill_diagonal(distance_matrix, 0)
+    
+    return distance_matrix, unique_wine_ids
+
+
