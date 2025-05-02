@@ -151,8 +151,7 @@ def pairwise_distance_matrix(napping_csv):
     n_wines = len(unique_wine_ids)
     
     # Create a mapping from wine IDs to matrix indices
-    id_to_index = {wine_id: idx for idx, wine_id in enumerate(unique_wine_ids)} # remember that the order of the wine ids is important for the distance matrix
-    
+    id_to_index = {wine_id: idx for idx, wine_id in enumerate(unique_wine_ids)} # Here it is not useful because the experiment_id is the same as the index in the matrix
     # Initialize distance matrix and count matrix
     distance_matrix = np.zeros((n_wines, n_wines))
     count_matrix = np.zeros((n_wines, n_wines))
@@ -220,6 +219,6 @@ def compute_experiment_ids_in_images(path_to_img):
     image_files = os.listdir(path_to_img)
     
     # Extract experiment IDs from filenames
-    experiment_ids = [re.search(r'(\d+)', file).group(1) for file in image_files if re.search(r'(\d+)', file)]
+    experiment_ids = [int(re.search(r'(\d+)', file).group(1)) for file in image_files if re.search(r'(\d+)', file)]
     
     return experiment_ids
