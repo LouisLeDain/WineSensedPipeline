@@ -6,6 +6,7 @@ from PIL import Image
 import pandas as pd
 import torch
 from transformers import CLIPModel, CLIPTokenizer, CLIPProcessor, CLIPImageProcessor
+import re
 
 np.random.seed(0)
 
@@ -79,11 +80,11 @@ def perform_clip_from_text(text):
     model_name = "openai/clip-vit-base-patch32"
     model = CLIPModel.from_pretrained(model_name)
     tokenizer = CLIPTokenizer.from_pretrained(model_name)
-    processor = CLIPProcessor.from_pretrained(model_name)
 
     # Get text embeddings
     text_input = tokenizer(text, padding=True, return_tensors="pt")
-    text_embeddings = model.get_text_features(**text_input)
+    with torch.no_grad():
+        text_embeddings = model.get_text_features(**text_input)
     text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True) # (len(text), 512)
 
     return text_embeddings
@@ -104,7 +105,8 @@ def perform_clip_from_image(image):
 
     # Get text embeddings
     image_input = image_processor(images=image, return_tensors="pt")
-    image_embeddings = model.get_image_features(**image_input) ############## Tout se fait sur le CPU la ? à changer.
+    with torch.no_grad():
+        image_embeddings = model.get_image_features(**image_input) ############## Tout se fait sur le CPU la ? à changer.
     image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True) # (n_img, 512)
 
     return image_embeddings
@@ -122,7 +124,8 @@ def perform_clip_from_image_and_text(image, text):
 
     # Get image embeddings 
     inputs = processor(text=text, images=image, return_tensors="pt", padding=True)
-    outputs = model(**inputs)
+    with torch.no_grad():
+        outputs = model(**inputs)
     
     text_embeds  = outputs.text_embeds    # shape: (batch_size, 1024)
     image_embeds = outputs.image_embeds   # shape: (batch_size, 1024)
@@ -193,3 +196,16 @@ def pairwise_distance_matrix(napping_csv):
     return distance_matrix, unique_wine_ids
 
 
+def process_text_data(text_data):
+    '''
+    Process the text data before the CLIP embeddings
+        input -> text data
+        output -> processed text_data
+    '''
+    # Convert to lowercase
+    text_data = [text.casefold() if isinstance(text, str) else text for text in text_data]
+    
+    # Remove punctuation
+    text_data = [re.sub(r'[^\w\s]', '', text) if isinstance(text, str) else text for text in text_data]
+    
+    return text_data
