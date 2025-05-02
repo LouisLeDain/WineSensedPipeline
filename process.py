@@ -89,7 +89,7 @@ def perform_clip_from_text(text):
     return text_embeddings
 
 
-def perform_clip_from_image(image_path):
+def perform_clip_from_image(image):
     
     '''
     Compute CLIP embeddings over images:
@@ -103,13 +103,34 @@ def perform_clip_from_image(image_path):
     image_processor = CLIPImageProcessor.from_pretrained(model_name)
 
     # Get text embeddings
-    image = Image.open(image_path)    
     image_input = image_processor(images=image, return_tensors="pt")
     image_embeddings = model.get_image_features(**image_input) ############## Tout se fait sur le CPU la ? à changer.
     image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True) # (n_img, 512)
 
     return image_embeddings
+def perform_clip_from_image_and_text(image, text):
+    '''
+    Compute CLIP embeddings over images and text:
+        input -> image
+        output -> CLIP embedding
+    '''
+    
+    # Setting up the model
+    model_name = "openai/clip-vit-base-patch32"
+    model = CLIPModel.from_pretrained(model_name)
+    processor = CLIPProcessor.from_pretrained(model_name)
 
+    # Get image embeddings 
+    inputs = processor(text=text, images=image, return_tensors="pt", padding=True)
+    outputs = model(**inputs)
+    
+    text_embeds  = outputs.text_embeds    # shape: (batch_size, 1024)
+    image_embeds = outputs.image_embeds   # shape: (batch_size, 1024)
+    
+    joint_embeds = (text_embeds + image_embeds)/2 # shape: (batch_size, 1024)
+    
+    return joint_embeds
+    
 def pairwise_distance_matrix(napping_csv):
     '''
     Compute the pairwise distance matrix of the data using the napping.csv file :
@@ -160,8 +181,8 @@ def pairwise_distance_matrix(napping_csv):
     mask = count_matrix > 0
     distance_matrix[mask] = distance_matrix[mask] / count_matrix[mask]
     
-    # For pairs that don't have a distance (count = 0), set to NaN
-    distance_matrix[~mask] = np.nan
+    # For pairs that don't have a distance (count = 0), set to zero (mean not defined, not zero distance)
+    distance_matrix[~mask] = 0
     
     # Make the matrix symmetric by averaging with its transpose
     distance_matrix = (distance_matrix + distance_matrix.T) / 2
