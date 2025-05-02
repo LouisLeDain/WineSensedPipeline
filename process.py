@@ -7,7 +7,7 @@ import pandas as pd
 import torch
 from transformers import CLIPModel, CLIPTokenizer, CLIPProcessor, CLIPImageProcessor
 import re
-
+import os
 np.random.seed(0)
 
 
@@ -209,3 +209,17 @@ def process_text_data(text_data):
     text_data = [re.sub(r'[^\w\s]', '', text) if isinstance(text, str) else text for text in text_data]
     
     return text_data
+
+def compute_experiment_ids_in_images(path_to_img):
+    '''
+    Compute the experiment ids in the images
+        input -> path to the images
+        output -> list of experiment ids
+    '''
+    # Get all image files in the directory
+    image_files = os.listdir(path_to_img)
+    
+    # Extract experiment IDs from filenames
+    experiment_ids = [re.search(r'(\d+)', file).group(1) for file in image_files if re.search(r'(\d+)', file)]
+    
+    return experiment_ids
