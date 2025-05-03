@@ -23,9 +23,7 @@ Faire un fichier config où l'on met les paramètres du type path, device, etc.
 
 data/
 
-  ∟-> image/
-  
-      ∟-> 'global_id'.jpg files
+  ∟-> image/ = 'global_id'.jpg files
       
   ∟-> napping.csv = {session_round_name, event_name, experiment_no, experiment_id, coor1, coor2, color}
   
