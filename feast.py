@@ -1,5 +1,6 @@
 from process import pairwise_distance_matrix, perform_nmds,perform_tsne, perform_clip_from_text, \
 perform_clip_from_image, perform_clip_from_image_and_text, perform_cca,compute_experiment_ids_in_images
+from tsne import Tsne
 from PIL import Image
 import os
 import re
@@ -23,7 +24,8 @@ class Feast(object):
         self.scraped_csv = scraped_csv
         self.experiment_csv = experiment_csv
         self.distance_matrix = None
-        self.wine_ids = None
+        self.experiments_ids = None
+        self.global_ids = sorted(scraped_csv['global_ids'].unique())
         self.wine_id_to_index_human = None
         self.wine_id_to_index_machine = None
         self.distance_matrix = None
@@ -36,13 +38,13 @@ class Feast(object):
         """
         # Compute the distance matrix
         print("Computing pairwise distance matrix...")
-        self.distance_matrix, self.wine_ids = pairwise_distance_matrix(self.napping_csv)
+        self.distance_matrix, self.experiments_ids = pairwise_distance_matrix(self.napping_csv)
 
         # Create a mapping from wine IDs to matrix indices
-        self.wine_id_to_index_human = {wine_id.astype(int): idx for idx, wine_id in enumerate(self.wine_ids)}
+        self.wine_id_to_index_human = {experiment_id.astype(int): idx for idx, experiment_id in enumerate(self.experiments_ids)}
 
         # Print some statistics
-        print(f"Number of unique wines: {len(self.wine_ids)}")
+        print(f"Number of unique human tasted wines: {len(self.experiments_ids)}")
 
         # Create 2d points using the matrix
         print("Creating 2D points using the distance matrix...")
@@ -54,22 +56,11 @@ class Feast(object):
         """
         Run the machine kernel.
         """
-        if self.text_model is None and self.image_model is None:
-            raise ValueError("Text and image models must be provided to compute the machine kernel.")
-        
-        if self.text_model is None:
-            print("Computing image embeddings...")
-            images = [Image.open(os.path.join(self.path_to_img, img)) for img in os.listdir(self.path_to_img)]
-            if self.image_model == "clip":
-                self.machine_kernel = perform_tsne(perform_clip_from_image(images))
-                self.wine_id_to_index_machine = {int(re.search(r'(\d+)', img).group(1)): idx for idx, img in enumerate(os.listdir(self.path_to_img))} # we only take the experiment id and not the name of the file
-            else:
-                raise ValueError("Unsupported image model. Please provide a valid model.")
-            
-        elif self.image_model is None:
-           pass
-           ### TODO: Implement text model embedding computation
-           # We need reviews to do that
+       tsne_compute = Tsne(path_to_img='data/images/', image_model='clip',text_model=None, scraped_csv='data/scraped.csv')
+       tsne_compute.run()
+       self.machine_kernel = tsne_compute.tsne_positions
+       self.wine_id_to_index_machine = tsne_compute.global_id
+
             
     def run(self):
         """
