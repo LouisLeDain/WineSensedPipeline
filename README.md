@@ -27,6 +27,6 @@ data/
       
   ∟-> napping.csv = {session_round_name, event_name, experiment_no, experiment_id, coor1, coor2, color}
   
-  ∟-> scraped_wines.csv = {global_id, year, type, producer, variety, vineyard, country, wine_name, alcohol, experiment_id (if used for human kernel experiment)}
+  ∟-> scraped_wines.csv = {global_id, year, type, producer, variety, vineyard, country, region, wine_name, alcohol, experiment_id (if used for human kernel experiment)}
   
   ∟-> reviews.csv = {global_id, review}
