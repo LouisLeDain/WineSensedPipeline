@@ -18,3 +18,12 @@ Faire un fichier config où l'on met les paramètres du type path, device, etc.
 •⁠  ⁠⁠Implémenter les métriques pour tester FEAST (discussion sur la version V2 pour la notation)
 
 •⁠  ⁠⁠Faire fonctionner sur GPU avec batchs
+
+## Data Architecture
+
+data/
+  ∟-> image/
+      ∟-> 'global_id'.jpg files
+  ∟-> napping.csv = {session_round_name, event_name, experiment_no, experiment_id, coor1, coor2, color}
+  ∟-> scraped_wines.csv = {global_id, year, type, producer, variety, vineyard, country, wine_name, alcohol, experiment_id (if used for human kernel experiment)}
+  ∟-> reviews.csv = {global_id, review}
