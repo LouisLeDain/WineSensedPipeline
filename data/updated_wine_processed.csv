@@ -1,0 +1,96 @@
+Type,Producer,Variety,Vineyard,Country,Region,experiment_id,global_id,year,wine_name,wine_alcohol
+Red,Château La Croix Fourney,Red Bordeaux Blend,,France,Bordeaux,0,0,2018,St. Émilion Grand Cru,14.0
+Red,Pasqua,Red Blend,,Italy,Veneto,1,1,2019,Vino da Tavola,12.5
+Red,Kaesler,Shiraz,,Australia,South Australia,2,2,2021,Clare Valley,13.5
+Red,Tenuta Sette Ponti,SuperTuscan Blend,,Italy,Tuscany,4,4,2022,Toscana IGT,16.0
+Red,Château Rocher-Gardat,Red Bordeaux Blend,,France,Bordeaux,5,5,2023,Montagne-St. Émilion,14.0
+Red,Ciacci Piccolomini d'Aragona,Sangiovese,,Italy,Tuscany,6,6,2022,Brunello di Montalcino,14.0
+Red,Casali del Barone,Barbera,,Italy,Piedmont,7,7,2019,Barbera d'Asti Superiore,14.65
+Red,Vinicola Tombacco,Montepulciano,,Italy,Molise,8,8,2019,Biferno,14.0
+Red,Bread & Butter,Pinot Noir,,USA,California,9,9,2023,California,14.0
+Red,La Spinetta (Rivetti),Barbera,Cà di Pian,Italy,Piedmont,10,10,2016,Barbera d'Asti,15.0
+White,Agricoltori del Geografico,Chardonnay Blend,,Italy,Tuscany,11,11,2021,Toscana IGT,14.0
+Red,Grant Burge,Shiraz,,Australia,South Australia,12,12,2023,Barossa,15.5
+Red,Felix Solis,Tempranillo Blend,,Spain,Spain,13,13,2023,,13.5
+Red,Cantina VR,Sangiovese Blend,,Italy,Tuscany,14,14,2019,Chianti,13.5
+Red,Bodegas Santa Rufina,Tempranillo,,Spain,Castilla y León,15,15,2000,Cigales,14.0
+Red,Società Agricola Nativ,Aglianico,,Italy,Campania,16,16,2020,Irpinia Campi Taurasini,14.0
+Red,Tenuta Giustini,Negroamaro,,Italy,Puglia,17,17,2023,Salento IGT,
+Red,Feudi di San Gregorio,Aglianico,,Italy,Campania,18,18,2020,Taurasi DOCG,14.5
+Red,Bodegas Vilano,Tempranillo,,Spain,Castilla y León,20,20,2022,Ribera del Duero,
+Red,Bodegas Olarra,Tempranillo Blend,,Spain,La Rioja,21,21,2021,Rioja,14.7
+Red,Torbreck,Shiraz Blend,,Australia,South Australia,23,23,2002,Barossa Valley,13.5
+Red,Ego Bodegas,Red Blend,,Spain,Murcia,24,24,2022,Jumilla,12.5
+Red,Calmel & Joseph,Red Rhone Blend,,France,Languedoc Roussillon,25,25,2022,Terrasses du Larzac,12.5
+Red,Château Moulin de Blanchon,Red Bordeaux Blend,,France,Bordeaux,26,26,2023,Haut-Médoc,13.5
+Red,Chaffey Bros,Grenache Blend,,Australia,South Australia,28,28,2022,Barossa Valley,
+Red,Marcelo Pelleriti,Red Blend,,Argentina,Mendoza,30,30,2019,,
+Red,Masca del Tacco,Primitivo,,Italy,Puglia,31,31,2023,Primitivo di Manduria,13.5
+Red,Camille Cayran,Red Rhone Blend,,France,Rhône,32,32,2023,Cairanne,14.5
+Red,Domini de la Cartoixa,Grenache Blend,,Spain,Catalunya,34,34,2021,Montsant,13.5
+White,Ponte Lungo,White Blend,,Italy,Tuscany,35,35,2021,Toscana IGT,
+Red,Cantina Fabulas,Montepulciano,,Italy,Abruzzi,36,36,2022,Montepulciano d'Abruzzo,14.5
+Red,Ponte Lungo,Sangiovese,,Italy,Tuscany,38,38,2019,Toscana IGT,
+Red,Vigneti del Vulture,Aglianico,,Italy,Basilicata,39,39,2021,Aglianico del Vulture,13.5
+Red,Fantini,Red Blend,,Italy,Italy,40,40,NV,Vino da Tavola,
+Red,32 Winds,Pinot Noir,Moonshine Ranch,USA,California,41,41,2022,Sonoma Coast,13.0
+Red,Casa Ermelinda Freitas,Shiraz,,Portugal,Península de Setúbal,42,42,2023,Setúbal,13.0
+Red,Casa Ferreirinha,Red Blend,,Portugal,Douro,43,43,2023,Douro,15.0
+Red,Barbanera,SuperTuscan Blend,,Italy,Tuscany,44,44,2021,Toscana IGT,
+Red,La Bollina,Red Blend,,Italy,Tuscany,45,45,2018,Toscana IGT,14.0
+Red,Feudi Bizantini,Red Blend,,Italy,Abruzzi,46,46,NV,Abruzzo,13.5
+Red,Bastioni della Rocca,Red Blend,,Italy,Puglia,47,47,2023,Puglia IGT,14.0
+Red,Lorenzo Begali,Corvina Blend,Monte Ca' Bianca,Italy,Veneto,48,48,2018,Amarone della Valpolicella Classico,13.5
+Red,Atlan & Artisan,Red Blend,,Spain,Balearic Islands,49,49,2021,Vi de La Tierra Mallorca,
+Red,Château d'Arcole,Red Bordeaux Blend,,France,Bordeaux,50,50,2022,St. Émilion Grand Cru,13.5
+Red,Bodegas Reyes,Tempranillo,,Spain,Castilla y León,51,51,2022,Ribera del Duero,
+Red,Cantine di Ora,Corvina Blend,,Italy,Veneto,52,52,2020,Veneto IGT,15.0
+Red,Moillard,Pinot Noir,,France,Burgundy,53,53,2020,Santenay,13.0
+Red,Cantine Romagnoli,Red Blend,,Italy,Italy,54,54,2018,Vino da Tavola,14.5
+Red,Casa Vinicola Bennati,Corvina Blend,,Italy,Veneto,55,55,2016,Amarone della Valpolicella,
+Red,Castello delle Regine,Sangiovese,Il Paggio,Italy,Umbria,57,57,2012,Umbria,14.5
+Red,La Bollina,Red Blend,,Italy,Sicily,58,58,2019,Terre Siciliane,13.5
+Red,Masso Antico,Primitivo,,Italy,Puglia,59,59,2023,Salento IGT,
+Red,monte real,Tempranillo,Viña Monty,Spain,La Rioja,60,60,2013,Rioja,15.0
+Red,Astrale,Sangiovese Blend,,Italy,Tuscany,61,61,2023,Chianti,14.0
+Red,Château Grand Pey Lescours,Red Bordeaux Blend,,France,Bordeaux,62,62,2021,St. Émilion Grand Cru,14.0
+Red,Giuseppe Lonardi,Corvina Blend,,Italy,Veneto,63,63,2019,Amarone della Valpolicella Classico,14.0
+Red,Domingo Molina,Cabernet Sauvignon,,Argentina,Valles Calchaquíes,64,64,2011,Yacochuya,13.2
+Red,Byrne & Smith,Shiraz,,Australia,New South Wales,65,65,2020,Riverina,14.0
+Red,Abadia Retuerta,Tempranillo Blend,Sardon de Duero,Spain,Castilla y León,68,68,2020,Vino de la Tierra de Castilla y León,14.5
+Red,Bodegas Resalte de Peñafiel,Tempranillo,,Spain,Castilla y León,69,69,2021,Ribera del Duero,14.5
+Red,Villa Mottura,Primitivo,,Italy,Puglia,70,70,2022,Primitivo di Manduria,14.0
+Red,Azienda Agraria Guerrieri,Red Blend,,Italy,Marche,71,71,2023,Marche IGT,
+Red,Baron Nathaniel / Baron Philippe De Rothschild,Red Bordeaux Blend,,France,Bordeaux,72,72,2019,Pauillac,14.0
+Red,Montedidio,Syrah,,Italy,Latium,73,73,2021,Lazio,
+Red,Renato Ratti,Nebbiolo,,Italy,Piedmont,74,74,2023,Langhe DOC,14.0
+Red,Molino di Sant' Antimo,Merlot,,Italy,Tuscany,75,75,2019,Toscana IGT,
+Red,Antinori,Sangiovese Blend,,Italy,Tuscany,77,77,2000,Chianti Classico DOCG,
+Red,Ponte Lungo,Zinfandel,,Italy,Puglia,78,78,2019,Puglia IGT,13.0
+Red,Vin POP - Chateau Surain,Malbec,,France,Bordeaux,79,79,2020,Bordeaux,14.0
+Red,Château Grand Corbin Manuel,Red Bordeaux Blend,,France,Bordeaux,80,80,2023,St. Émilion Grand Cru,
+Red,Società Agricola Nativ,Aglianico,,Italy,Campania,81,81,2020,Irpinia Campi Taurasini,
+Red,Jorge Navascues,Garnacha,Almonacid de la Sierra,Spain,Aragón,82,82,2018,Cariñena,
+Red,Faustino,Tempranillo Blend,Bodegas Faustino,Spain,La Rioja,83,83,2009,Rioja,
+Red,Bodegas Trenza,Monastrell,,Spain,Valencia,86,86,2023,Valencia,
+Red,Casa Ermelinda Freitas,Red Blend,,Portugal,Península de Setúbal,87,87,2023,Vinho Regional Península de Setúbal,15.0
+Red,Château La Tour De Chollet,Red Bordeaux Blend,,France,Bordeaux,89,89,2015,Sainte Foy Bordeaux,
+Rosé,Dominio del Aguila,Tempranillo Blend,,Spain,Castilla y León,90,90,2023,Ribera del Duero,
+Red,Bodegas Emilio Moro,Tempranillo,,Spain,Castilla y León,91,91,2022,Ribera del Duero,
+Red,Marques de Arragon,Tempranillo,,Spain,Murcia,92,92,2012,Jumilla,14.5
+Red,Rebel Ridge,Zinfandel,,USA,California,94,94,2020,Napa Valley,
+Red,Tormaresca,Primitivo,,Italy,Puglia,95,95,2022,Salento IGT,13.5
+Red,Château Moulin de Blanchon,Red Bordeaux Blend,,France,Bordeaux,96,96,2023,Haut-Médoc,15.0
+Red,Château Rocher-Gardat,Red Bordeaux Blend,,France,Bordeaux,97,97,2023,Montagne-St. Émilion,14.5
+Red,Domaine Labruyere,Gamay,,France,Burgundy,99,99,2020,Bourgogne,13.3
+Red,Bodegas La Cepa Alta,Tempranillo Blend,,Spain,Castilla y León,100,100,2022,Ribera del Duero,
+Red,350 degree de Bellevue,Red Bordeaux Blend,,France,Bordeaux,101,101,2020,St. Émilion Grand Cru,14.5
+Red,Château du Grand Bos,Red Bordeaux Blend,,France,Bordeaux,102,102,2021,Graves,
+White,Ponte Lungo,White Blend,,Italy,Tuscany,104,104,2021,Toscana IGT,
+Red,Château Graves de Peyroutas,Red Bordeaux Blend,,France,Bordeaux,105,105,2019,St. Émilion Grand Cru,12.5
+Red,Taron,Tempranillo,,Spain,La Rioja,106,106,2015,Rioja,15.0
+Red,Château Grand Français,Red Bordeaux Blend,,France,Bordeaux,107,107,2019,Bordeaux Supérieur,18.0
+Red,Savoni,Zinfandel,,Italy,Puglia,109,109,2019,Puglia IGT,
+Red,Tenuta Guado al Tasso (Antinori),Red Blend,,Italy,Tuscany,112,112,2023,Bolgheri,
+Red,Château Saincrit,Red Bordeaux Blend,,France,Bordeaux,113,113,2020,Bordeaux,
+Red,Capafons-Ossó,Red Blend,,Spain,Catalunya,114,114,2015,Priorat,
