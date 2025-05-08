@@ -3,7 +3,6 @@
 
 ## TO DO
 
-Faire un fichier config où l'on met les paramètres du type path, device, etc.
 
 •⁠  ⁠Implémenter le calcul des positions tsne sur le dataset global (avec une clé « global_id » imaginaire pour le moment)
 
@@ -17,7 +16,6 @@ Faire un fichier config où l'on met les paramètres du type path, device, etc.
 
 •⁠  ⁠⁠Implémenter les métriques pour tester FEAST (discussion sur la version V2 pour la notation)
 
-•⁠  ⁠⁠Faire fonctionner sur GPU avec batchs
 
 ## Data Architecture
 

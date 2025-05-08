@@ -24,6 +24,8 @@ napping.csv : 2819 items
 - experiment_id : même clé que dans les deux autres tables, permet de relier l'expérience à un vin
 - pour les autres valeurs j'ai rien touché
 
-
+experiment_id_reviews.csv : 74 755 Contient les reviews correspondant aux images de l'éxpérience (ce sont les reviews scraps par les chercheurs)
+- experiment_id : même clé que dans les deux autres tables, permet de relier l'expérience à un vin
+- review : une review. Un vin peut avoir plusieurs reviews
 Les images scrappées sont sous le format {experiment_id}.jpg
 Je n'ai encore rencontré cette situation mais il n'est pas exclu que certaines images manquent
