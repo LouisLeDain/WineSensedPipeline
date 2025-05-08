@@ -1,9 +1,11 @@
 import numpy as np
 from sklearn.datasets import load_iris
 import os
-
+from PIL import Image
 from process import perform_nmds, perform_tsne, perform_cca, perform_clip_from_text, perform_clip_from_image
+from feast import Feast
 
+from config import PATH_TO_IMG, NAPPING_CSV, IMAGE_MODEL, TEXT_MODEL, SCRAPED_CSV, EXPERIMENT_CSV, DEVICE
 np.random.seed(0)
 
 '''
@@ -61,7 +63,7 @@ print("Testing CLIP text")
 
 text = ["a photo of a transformers logo", "a photo of a cat"]
 
-text_embeddings = perform_clip_from_text(text)
+text_embeddings = perform_clip_from_text(text,DEVICE)
 
 print(np.shape(text_embeddings))
 
@@ -77,9 +79,18 @@ image_folder = 'data/images'
 image_file = '0.jpg'
 
 image_path = os.path.join(image_folder, image_file)
-
-image_embeddings = perform_clip_from_image(image_path)
+image= Image.open(image_path)
+image_embeddings = perform_clip_from_image(image,DEVICE)
 
 print(np.shape(image_embeddings))
 
 print("CLIP image test ran successfully")
+
+
+print("start testing FEAST pipeline")
+
+# Example usage to test the Feast pipeline
+feast = Feast(PATH_TO_IMG, NAPPING_CSV,SCRAPED_CSV,EXPERIMENT_CSV,DEVICE,image_model=IMAGE_MODEL,text_model=TEXT_MODEL)
+
+feast.run()
+print("Feast pipeline completed.") 

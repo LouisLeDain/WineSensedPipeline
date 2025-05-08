@@ -9,7 +9,7 @@ class Feast(object):
     Class to handle the Feast pipeline.
     """
 
-    def __init__(self, path_to_img,napping_csv,scraped_csv,experiment_csv,text_model = None, image_model = None):
+    def __init__(self, path_to_img,napping_csv,scraped_csv,experiment_csv,device,text_model = None, image_model = None):
         """
         Initialize the Feast pipeline.
 
@@ -22,6 +22,7 @@ class Feast(object):
         self.image_model = image_model
         self.scraped_csv = scraped_csv
         self.experiment_csv = experiment_csv
+        self.device = device
         self.distance_matrix = None
         self.wine_ids = None
         self.wine_id_to_index_human = None
@@ -61,7 +62,7 @@ class Feast(object):
             print("Computing image embeddings...")
             images = [Image.open(os.path.join(self.path_to_img, img)) for img in os.listdir(self.path_to_img)]
             if self.image_model == "clip":
-                self.machine_kernel = perform_tsne(perform_clip_from_image(images))
+                self.machine_kernel = perform_tsne(perform_clip_from_image(images,self.device).cpu())
                 self.wine_id_to_index_machine = {int(re.search(r'(\d+)', img).group(1)): idx for idx, img in enumerate(os.listdir(self.path_to_img))} # we only take the experiment id and not the name of the file
             else:
                 raise ValueError("Unsupported image model. Please provide a valid model.")
@@ -70,7 +71,11 @@ class Feast(object):
            pass
            ### TODO: Implement text model embedding computation
            # We need reviews to do that
-            
+        
+        else:
+            pass
+            ### TODO: Implement text +image model embedding computation
+           # We need reviews to do that
     def run(self):
         """
         Run the Feast pipeline.
@@ -98,9 +103,3 @@ class Feast(object):
         print("Weights computed successfully.")        
         print("Feast pipeline completed successfully.")
 
-if __name__ == "__main__":
-    # Example usage
-    feast = Feast(path_to_img='data/images/', napping_csv='data/napping.csv',image_model='clip',text_model=None, scraped_csv='data/scraped.csv',experiment_csv='data/experiment.csv')
-
-    feast.run()
-    print("Feast pipeline completed.")

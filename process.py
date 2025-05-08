@@ -69,7 +69,7 @@ def perform_cca(data1, data2):
     return weights 
 
 
-def perform_clip_from_text(text):
+def perform_clip_from_text(text,device):
     '''
     Compute CLIP embeddings over tabular data (text):
         input -> tabular data (table of text data)
@@ -78,11 +78,11 @@ def perform_clip_from_text(text):
 
     # Setting up the model
     model_name = "openai/clip-vit-base-patch32"
-    model = CLIPModel.from_pretrained(model_name)
+    model = CLIPModel.from_pretrained(model_name).to(device)
     tokenizer = CLIPTokenizer.from_pretrained(model_name)
 
     # Get text embeddings
-    text_input = tokenizer(text, padding=True, return_tensors="pt")
+    text_input = tokenizer(text, padding=True, return_tensors="pt").to(device)
     with torch.no_grad():
         text_embeddings = model.get_text_features(**text_input)
     text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True) # (len(text), 512)
@@ -90,27 +90,28 @@ def perform_clip_from_text(text):
     return text_embeddings
 
 
-def perform_clip_from_image(image):
+def perform_clip_from_image(image,device):
     
     '''
     Compute CLIP embeddings over images:
-        input -> image
+        input -> image_batch size (n_img, channels, height, width)
         output -> CLIP embedding
     '''
     
     # Setting up the model
     model_name = "openai/clip-vit-base-patch32"
-    model = CLIPModel.from_pretrained(model_name)
+    model = CLIPModel.from_pretrained(model_name).to(device)
     image_processor = CLIPImageProcessor.from_pretrained(model_name)
 
-    # Get text embeddings
-    image_input = image_processor(images=image, return_tensors="pt")
+    # Preprocess the image batch
+    image_input = image_processor(images=image, return_tensors="pt").to(device)
+    # Get image embeddings
     with torch.no_grad():
-        image_embeddings = model.get_image_features(**image_input) ############## Tout se fait sur le CPU la ? à changer.
-    image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True) # (n_img, 512)
+        image_embeddings = model.get_image_features(**image_input)
+    image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True) # (n_img, 512) We normalize the vectors so that only the direction is used and not the norm
 
     return image_embeddings
-def perform_clip_from_image_and_text(image, text):
+def perform_clip_from_image_and_text(image, text,device):
     '''
     Compute CLIP embeddings over images and text:
         input -> image
@@ -119,11 +120,11 @@ def perform_clip_from_image_and_text(image, text):
     
     # Setting up the model
     model_name = "openai/clip-vit-base-patch32"
-    model = CLIPModel.from_pretrained(model_name)
+    model = CLIPModel.from_pretrained(model_name).to(device)
     processor = CLIPProcessor.from_pretrained(model_name)
 
     # Get image embeddings 
-    inputs = processor(text=text, images=image, return_tensors="pt", padding=True)
+    inputs = processor(text=text, images=image, return_tensors="pt", padding=True).to(device)
     with torch.no_grad():
         outputs = model(**inputs)
     
