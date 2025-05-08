@@ -1,5 +1,11 @@
 # WineSensedPipeline
 
+## RECENTLY ADDED
+
+- Fichier config.py qui contient tous les paramètres (Les fonctions de processs et de test_process ont été modifiés en conséquences)
+- Batch sur GPU
+- Ajout du fichier data/experiment_id_reviews.csv contenant des reviews pour les vins ayant un experiment_id (scrapé par les chercheurs)
+- Création dans process.py de la fonction compute_mean_review_embedding qui a partir du fichier csv renvoye l'embedding de texte moyen pour chaque experiment_id (on va enfin pouvoir implémenter FEAST)
 
 ## TO DO
 

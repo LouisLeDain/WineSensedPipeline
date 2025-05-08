@@ -2,10 +2,11 @@ import numpy as np
 from sklearn.datasets import load_iris
 import os
 from PIL import Image
-from process import perform_nmds, perform_tsne, perform_cca, perform_clip_from_text, perform_clip_from_image
+from process import perform_nmds, perform_tsne, perform_cca, perform_clip_from_text, perform_clip_from_image,compute_mean_review_embedding
 from feast import Feast
 
-from config import PATH_TO_IMG, NAPPING_CSV, IMAGE_MODEL, TEXT_MODEL, SCRAPED_CSV, EXPERIMENT_CSV, DEVICE
+
+from config import PATH_TO_IMG, NAPPING_CSV, IMAGE_MODEL, TEXT_MODEL, SCRAPED_CSV, EXPERIMENT_CSV, DEVICE,REVIEW_CSV, MAX_REVIEW_SAMPLE_SIZE
 np.random.seed(0)
 
 '''
@@ -86,7 +87,8 @@ print(np.shape(image_embeddings))
 
 print("CLIP image test ran successfully")
 
-
+print("testing Mean text embedding")
+compute_mean_review_embedding( REVIEW_CSV, DEVICE,MAX_REVIEW_SAMPLE_SIZE)
 print("start testing FEAST pipeline")
 
 # Example usage to test the Feast pipeline
@@ -94,3 +96,4 @@ feast = Feast(PATH_TO_IMG, NAPPING_CSV,SCRAPED_CSV,EXPERIMENT_CSV,DEVICE,image_m
 
 feast.run()
 print("Feast pipeline completed.") 
+

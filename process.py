@@ -8,6 +8,8 @@ import torch
 from transformers import CLIPModel, CLIPTokenizer, CLIPProcessor, CLIPImageProcessor
 import re
 import os
+import random
+from tqdm import tqdm
 np.random.seed(0)
 
 
@@ -82,7 +84,7 @@ def perform_clip_from_text(text,device):
     tokenizer = CLIPTokenizer.from_pretrained(model_name)
 
     # Get text embeddings
-    text_input = tokenizer(text, padding=True, return_tensors="pt").to(device)
+    text_input = tokenizer(text, padding=True, return_tensors="pt",truncation= True).to(device) # We put truncation to avoid the error of too long reviews
     with torch.no_grad():
         text_embeddings = model.get_text_features(**text_input)
     text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True) # (len(text), 512)
@@ -223,3 +225,36 @@ def compute_experiment_ids_in_images(path_to_img):
     experiment_ids = [int(re.search(r'(\d+)', file).group(1)) for file in image_files if re.search(r'(\d+)', file)]
     
     return experiment_ids
+
+def compute_mean_review_embedding(review_csv, device, max_sample):
+    '''
+    Compute the mean review embedding for each experiment id (because we can have several reviews for the same experiment id)
+        input -> review csv file
+        output -> mean review embedding for each experiment id
+    '''
+    # Read the data
+    data = pd.read_csv(review_csv)
+    
+    # Get unique experiment IDs
+    unique_experiment_ids = sorted(data['experiment_id'].unique())
+    
+    # Initialize mean embeddings dictionary
+    mean_embeddings = {}
+    
+    # Compute mean embedding for each experiment ID
+    for exp_id in tqdm(unique_experiment_ids):
+        
+        reviews = data[data['experiment_id'] == exp_id]['review'].tolist()
+        print(f"Number of reviews for experiment ID {exp_id}: {len(reviews)}")
+        if len(reviews) > max_sample:
+            reviews = random.sample(reviews, max_sample) # On peut se passer de max_sample et couvrir toutes les reviews si l'on découpe les reviews en plusieurs parties
+        # Remove empty strings and NaN values
+        reviews = [review for review in reviews if isinstance(review, str) and review.strip() and review.lower() != "nan"]
+
+        if len(reviews) > 0:
+            
+            embeddings = perform_clip_from_text(reviews, device)
+            mean_embedding = torch.mean(embeddings, dim=0).cpu().numpy()
+            mean_embeddings[exp_id] = mean_embedding
+    
+    return mean_embeddings
