@@ -88,12 +88,13 @@ print(np.shape(image_embeddings))
 print("CLIP image test ran successfully")
 
 print("testing Mean text embedding")
-compute_mean_review_embedding( REVIEW_CSV, DEVICE,MAX_REVIEW_SAMPLE_SIZE)
-print("start testing FEAST pipeline")
+#compute_mean_review_embedding( REVIEW_CSV, DEVICE,MAX_REVIEW_SAMPLE_SIZE)
+print("start testing FEAST pipeline, only image")
 
 # Example usage to test the Feast pipeline
-feast = Feast(PATH_TO_IMG, NAPPING_CSV,SCRAPED_CSV,EXPERIMENT_CSV,DEVICE,image_model=IMAGE_MODEL,text_model=TEXT_MODEL)
+feast = Feast(PATH_TO_IMG, NAPPING_CSV,SCRAPED_CSV,EXPERIMENT_CSV,REVIEW_CSV,DEVICE,image_model=IMAGE_MODEL,text_model=TEXT_MODEL)
 
 feast.run()
 print("Feast pipeline completed.") 
+
 

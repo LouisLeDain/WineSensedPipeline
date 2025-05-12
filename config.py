@@ -5,8 +5,8 @@ This file contains the configuration settings for the project.
 
 PATH_TO_IMG = "data/images/"
 NAPPING_CSV = "data/napping.csv"
-IMAGE_MODEL = "clip"
-TEXT_MODEL = None
+IMAGE_MODEL = "clip" 
+TEXT_MODEL = "clip"
 SCRAPED_CSV="data/scraped.csv"
 EXPERIMENT_CSV="data/experiment.csv"
 REVIEW_CSV = "data/experiment_id_reviews.csv"

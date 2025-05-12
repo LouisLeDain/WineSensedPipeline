@@ -66,9 +66,8 @@ def perform_cca(data1, data2):
     # Perform CCA
     cca = CCA(n_components=2)
     data1_cca, data2_cca = cca.fit_transform(data1_scaled, data2_scaled)
-    weights = cca.x_loadings_ # (features, n_components)
 
-    return weights 
+    return data1_cca, data2_cca 
 
 
 def perform_clip_from_text(text,device):
@@ -134,7 +133,7 @@ def perform_clip_from_image_and_text(image, text,device):
     image_embeds = outputs.image_embeds   # shape: (batch_size, 1024)
     
     joint_embeds = (text_embeds + image_embeds)/2 # shape: (batch_size, 1024)
-    
+        
     return joint_embeds
     
 def pairwise_distance_matrix(napping_csv):
