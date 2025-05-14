@@ -97,4 +97,5 @@ feast = Feast(PATH_TO_IMG, NAPPING_CSV,SCRAPED_CSV,EXPERIMENT_CSV,REVIEW_CSV,DEV
 feast.run()
 print("Feast pipeline completed.") 
 
-
+print("testing TAR")
+feast.compute_tar()

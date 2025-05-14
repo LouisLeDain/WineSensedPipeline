@@ -5,6 +5,10 @@ from PIL import Image
 import os
 import re
 import numpy as np
+from sklearn.model_selection import train_test_split
+
+from sklearn.cross_decomposition import CCA 
+from sklearn.preprocessing import StandardScaler
 class Feast(object):
     """
     Class to handle the Feast pipeline.
@@ -122,5 +126,69 @@ class Feast(object):
         print("Weights computed successfully.")        
         print("Feast pipeline completed successfully.")
 
-    def inference(self):
-        pass
+    def compute_tar(self):
+        
+        # Compute the common experiment IDs
+        common_ids = set(self.wine_id_to_index_human.keys())&(set(self.wine_id_to_index_machine.keys()))
+        common_ids = sorted(list(common_ids))
+        self.common_ids = common_ids
+
+        
+        print(f"Number of common experiment IDs: {len(common_ids)}")
+        
+        # Filter the distance matrix to only include common experiment IDs
+        human_kernel_common = self.human_kernel[[self.wine_id_to_index_human[wine_id] for wine_id in common_ids]]
+        machine_kernel_common = self.machine_kernel[[self.wine_id_to_index_machine[wine_id] for wine_id in common_ids]]
+        
+
+        
+        idx = [self.wine_id_to_index_human[w] for w in common_ids]
+        D_full = self.distance_matrix
+        D = D_full[np.ix_(idx, idx)]
+        N = len(common_ids)
+
+        # 1. Build all triplets from your human-distance matrix D (NxN)
+        triplets = [] # The index are only on the Human kernel
+        for i in range(N):
+            for j in range(N):
+                for k in range(N):
+                    if D[i,j] > 0 and D[i,k] > 0 and D[i,j] < D[i,k]: # We put >0 because we don't want to have 0 distance (missing value)
+                        triplets.append((i,j,k))
+                        
+        # 1b. Split so train/test triplets are disjoint
+        all_wines = set(range(N))
+        train_wines, test_wines = train_test_split(list(all_wines), test_size=0.2, random_state=42)
+        test_triplets  = [(i,j,k) for (i,j,k) in triplets if i in test_wines  and j in test_wines  and k in test_wines ]
+
+        # 2. Fit CCA on train wines only
+        X_train = machine_kernel_common[train_wines]   # CLIP+t-SNE for train wines
+        Y_train = human_kernel_common[train_wines]     # NMDS for train wines
+        x_scaler  = StandardScaler().fit(X_train)
+        y_scaler = StandardScaler().fit(Y_train)
+        X_train_s = x_scaler.transform(X_train)
+        Y_train_s = y_scaler.transform(Y_train)
+        cca     = CCA(n_components=2).fit(X_train_s, Y_train_s)
+
+        # 3. Project *all* wines into the shared space
+        X_all_s   = x_scaler.transform(machine_kernel_common)       # shape (N, feats)
+        X_all_cca, _ = cca.transform(X_all_s, human_kernel_common)  # shape (N, 2)
+
+        # 4. Compute TAR on test triplets
+        agree = 0
+        for i, j, k in test_triplets:
+            dij = np.linalg.norm(X_all_cca[i] - X_all_cca[j])
+            dik = np.linalg.norm(X_all_cca[i] - X_all_cca[k])
+            if dij < dik:
+                agree += 1
+
+        tar = agree / len(test_triplets)
+        print(f"Triplet Agreement Ratio: {tar:.3f}")
+        
+        
+        # Test part to compute the TAR on the human kernel alone
+        tar_human = sum(
+        np.linalg.norm(human_kernel_common[i] - human_kernel_common[j]) < np.linalg.norm(human_kernel_common[i] - human_kernel_common[k])
+        for i, j, k in test_triplets
+        ) / len(test_triplets)
+
+        print("TAR (human NMDS alone):", tar_human)

@@ -10,7 +10,6 @@ import re
 import os
 import random
 from tqdm import tqdm
-np.random.seed(0)
 
 
 
@@ -26,9 +25,8 @@ def perform_nmds(distance_matrix):
     np.fill_diagonal(distance_matrix_symmetric, 0) # Ensure each point is at distance 0 of itself
 
     # Initialize and fit NMDS model
-    nmds = MDS(n_components=2, metric=False, dissimilarity='precomputed', random_state=0)
+    nmds = MDS(n_components=2, metric=False, dissimilarity='precomputed',  max_iter=1000, eps=1e-6, n_init=300)
     nmds_results = nmds.fit_transform(distance_matrix_symmetric) # (x_pos, y_pos)
-    
     return nmds_results 
 
 
@@ -179,7 +177,9 @@ def pairwise_distance_matrix(napping_csv):
                     # Update distance and count matrices
                     idx1, idx2 = id_to_index[wine_id1], id_to_index[wine_id2]
                     distance_matrix[idx1, idx2] += dist
+                    distance_matrix[idx2, idx1] += dist  # Ensure symmetry
                     count_matrix[idx1, idx2] += 1
+                    count_matrix[idx2, idx1] += 1  # Ensure symmetry
     
     # Compute average distances (avoid division by zero)
     mask = count_matrix > 0
@@ -187,13 +187,11 @@ def pairwise_distance_matrix(napping_csv):
     
     # For pairs that don't have a distance (count = 0), set to zero (mean not defined, not zero distance)
     distance_matrix[~mask] = 0
-    
-    # Make the matrix symmetric by averaging with its transpose
-    distance_matrix = (distance_matrix + distance_matrix.T) / 2
+
     
     # Set diagonal to zero (distance from a wine to itself is zero)
     np.fill_diagonal(distance_matrix, 0)
-    
+ 
     return distance_matrix, unique_wine_ids
 
 
